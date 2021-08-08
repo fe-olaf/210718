@@ -1,6 +1,7 @@
 const path = require('path')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 // module.exports 밖에서 가져다 쓸 수 있도록 내보낸다.
 module.exports = {
@@ -28,6 +29,11 @@ module.exports = {
         use: 'babel-loader', // 읽어온 파일을 babel 로 변화시킨다.
         exclude: /node_modules/,
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'], // 오른쪽에서 왼쪽으로 읽는다.
+        exclude: /node_modules/,
+      },
     ],
   },
   // 모듈시스템
@@ -39,6 +45,7 @@ module.exports = {
       template: './public/index.html', // 어떤 html 파일을 기준으로 동작을 할 것 인가 ?
       filename: './index.html', // 이름을 어떻게 내보낼 것인가 ? output path 를 따라간다.
     }),
+    new MiniCssExtractPlugin({ filename: 'css/style.css' }), // css 파일만 따로 추출하겠다.
   ],
   devServer: {
     contentBase: path.resolve(__dirname, 'dist'),
